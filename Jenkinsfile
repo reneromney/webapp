@@ -13,15 +13,14 @@ pipeline {
       }
     } 
     
-    stage ('Check-Git-Secrets') {
+    stage ('SAST') {
       steps {
-        sh 'rm trufflehog || true'
-        sh 'docker run gesellix/trufflehog --json https://github.com/reneromney/webapp.git > trufflehog '
-        sh 'cat trufflehog'
+        withSonarQubeEnv('sonar') {
+          sh 'mvn sonar:sonar'
+          sh 'cat target/sonar/report-task.txt'
+        }
       }
     }
-    
-
       
     stage ('Build') {
       steps {
