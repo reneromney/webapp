@@ -12,6 +12,13 @@ pipeline {
             ''' 
       }
     } 
+    
+    stage ('Check-Git-Secrest') {
+      steps {
+        sh 'rm trufflehog || true'
+        sh 'docker run gesellix/trufflehog --json https://github.com/reneromney/webapp.git > trufflehog '
+      }
+    }
       
     stage ('Build') {
       steps {
